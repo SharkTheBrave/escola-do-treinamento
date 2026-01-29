@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Área do Aluno</title>
+    <link rel="stylesheet" th:href="@{/styles/alunoStyle.css}">
+</head>
+<body>
+
+<div class="container">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h1 th:text="'Olá, ' + ${aluno.nome}"></h1>
+        <a href="/">Sair</a>
+    </div>
+    <p th:text="'Turma: ' + ${aluno.turma.nome}"></p>
+
+    <div class="grade-box">
+        <h3>Minha Grade Horária</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Horário</th>
+                    <th>Segunda</th>
+                    <th>Terça</th>
+                    <th>Quarta</th>
+                    <th>Quinta</th>
+                    <th>Sexta</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="h : ${horarios}">
+                    <td th:text="${h.inicio} + ' - ' + ${h.fim}" style="font-weight:bold; background:#eee;"></td>
+                    
+                    <td th:each="dia : ${diasSemana}">
+                        <span th:with="key=${h.id} + '-' + ${dia}"
+                              th:text="${mapaGrade.containsKey(key)} ? ${mapaGrade.get(key)} : '-'">
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="grade-box" style="margin-top: 30px; border-top: 5px solid #dc3545;">
+        <h3>Histórico de Faltas</h3>
+        
+        <div th:if="${faltas.empty}" style="padding: 10px; color: #28a745;">
+            Parabéns! Você não possui nenhuma falta registrada.
+        </div>
+
+        <table th:if="${!faltas.empty}">
+            <thead>
+                <tr>
+                    <th style="background-color: #dc3545;">Data</th>
+                    <th style="background-color: #dc3545;">Disciplina</th>
+                    <th style="background-color: #dc3545;">Justificativa</th> </tr>
+            </thead>
+            <tbody>
+                <tr th:each="f : ${faltas}">
+                    <td th:text="${#temporals.format(f.data, 'dd/MM/yyyy')}"></td>
+                    <td th:text="${f.disciplina.nome}"></td>
+
+                    <td>
+                        
+                        <form th:if="${f.justificativa == null}" action="/aluno/salvarJustificativa" method="post" style="display:flex; gap: 5px;">
+                            
+                            <input type="hidden" name="idFalta" th:value="${f.id}">
+                            <input type="hidden" name="idAluno" th:value="${aluno.id}">
+                            
+                            <input type="text" name="texto" placeholder="Motivo..." required style="width: 150px; padding: 5px;">
+                            
+                            <button type="submit" style="background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">OK</button>
+                        </form>
+
+                        <span th:if="${f.justificativa != null}" th:text="${f.justificativa}" style="color: gray; font-style: italic;"></span>
+                        
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="aviso-box">
+        <h3>Mural de Avisos</h3>
+        <div th:if="${avisos.empty}">Nenhum aviso no momento.</div>
+        
+        <div th:each="aviso : ${avisos}" class="aviso">
+            <h4 th:text="${aviso.titulo}"></h4>
+            <p th:text="${aviso.texto}"></p>
+            <br>
+            <small th:text="'Postado por: Prof. ' + ${aviso.professor.nome}"></small>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

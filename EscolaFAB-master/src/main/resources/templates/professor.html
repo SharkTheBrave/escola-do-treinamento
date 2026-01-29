@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Portal do Professor</title>
+    <link rel="stylesheet" th:href="@{/styles/professorStyle.css}">
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <h2 th:text="'Bem vindo, Prof. ' + ${professor.nome}"></h2>
+        <a href="/">Sair</a>
+    </div>
+
+    <div class="card">
+        <h3>Minhas Turmas (Realizar Chamada)</h3>
+        <ul class="list-group">
+        <li class="list-item" th:each="t : ${turmas}">
+            <span th:text="${t.nome} + ' (' + ${t.anoLetivo} + ')'"></span>
+            
+            <a th:href="@{/professor/{pid}/chamada/{tid}(pid=${professor.id}, tid=${t.id})}" 
+               class="btn" style="background:#007bff">Abrir Diário</a>
+        </li>
+    </ul>
+    </div>
+
+    <div class="card">
+        <h3>Publicar Novo Aviso</h3>
+        <form action="/professor/salvarAviso" method="post">
+            
+            <input type="hidden" name="idProfessor" th:value="${professor.id}">
+
+            <input type="text" name="titulo" placeholder="Título do Aviso" required>
+            <textarea name="texto" rows="3" placeholder="Mensagem..." required></textarea>
+            
+            <label>Enviar para:</label>
+            <select name="turma.id">
+                <option value="">-- Todos os Alunos (Geral) --</option>
+                <option th:each="t : ${turmas}" th:value="${t.id}" th:text="${t.nome}"></option>
+            </select>
+            
+            <button type="submit" class="btn">Publicar Aviso</button>
+        </form>
+    </div>
+
+<div class="card" style="border-left: 5px solid orange;" th:if="${!pendencias.empty}">
+        <h3 style="color: #d35400;">⚠️ Justificativas Pendentes</h3>
+        
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="background: #fce5cd;">
+                    <th style="padding:8px; border:1px solid #ddd;">Aluno</th>
+                    <th style="padding:8px; border:1px solid #ddd;">Data</th>
+                    <th style="padding:8px; border:1px solid #ddd;">Motivo</th>
+                    <th style="padding:8px; border:1px solid #ddd;">Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="f : ${pendencias}">
+                    <td style="padding:8px; border:1px solid #ddd;" th:text="${f.aluno.nome}"></td>
+                    <td style="padding:8px; border:1px solid #ddd;" th:text="${#temporals.format(f.data, 'dd/MM')}"></td>
+                    <td style="padding:8px; border:1px solid #ddd; font-style: italic;" th:text="${f.justificativa}"></td>
+                    <td style="padding:8px; border:1px solid #ddd; text-align: center;">
+                        
+                        <form action="/professor/abonarFalta" method="post">
+                            <input type="hidden" name="idFalta" th:value="${f.id}">
+                            <input type="hidden" name="idProfessor" th:value="${professor.id}">
+                            
+                            <button type="submit" style="background: #28a745; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 4px;">
+                                Abonar (Aceitar)
+                            </button>
+                        </form>
+                        
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="card" th:if="${pendencias.empty}" style="color: #777; text-align: center;">
+        <i>Nenhuma justificativa pendente de análise no momento.</i>
+    </div>
+
+    </div>
+
+</div>
+</body>
+</html>

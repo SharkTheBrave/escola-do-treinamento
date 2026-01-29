@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Diário de Classe</title>
+    <link rel="stylesheet" th:href="@{/styles/professorChamadaStyle.css}">
+</head>
+<body>
+
+<div class="card">
+    <a th:href="@{/professor/{id}/home(id=${professorId})}" class="btn-voltar">← Voltar para o Painel</a>
+    
+    <h2 th:text="'Chamada: ' + ${turmaAtual.nome}"></h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Aluno</th>
+                <th>Registrar Falta (Data de Hoje)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="aluno : ${alunos}">
+                <td th:text="${aluno.nome}"></td>
+                <td>
+                    <form action="/professor/salvarFalta" method="post" style="display:flex; gap:5px; align-items: center;">
+                        
+                        <input type="hidden" name="aluno.id" th:value="${aluno.id}">
+                        <input type="hidden" name="idProfessor" th:value="${professorId}"> <input type="date" name="data" th:value="${dataHoje}" required>
+                        
+                        <select name="disciplina.id" required>
+                            <option value="" disabled selected>Disciplina</option>
+                            <option th:each="d : ${disciplinas}" th:value="${d.id}" th:text="${d.nome}"></option>
+                        </select>
+
+                        <button type="submit" class="btn-falta">Lançar Falta</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

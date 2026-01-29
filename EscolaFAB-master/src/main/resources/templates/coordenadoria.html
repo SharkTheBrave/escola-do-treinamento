@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Painel Coordenador</title>
+        <link rel="stylesheet" th:href="@{/styles/coordenadoriaStyle.css}">
+</head>
+<body>
+
+    <h1>Painel de Controle - Coordenadoria</h1>
+    <p style="text-align: center;"><a href="/">Sair</a></p>
+
+    <div class="grid">
+
+        <div class="card">
+            <h3>Nova Turma</h3>
+            <form action="/coordenadoria/salvarTurma" method="post">
+                <input type="text" name="nome" placeholder="Ex: 3º Ano A" required>
+                <input type="number" name="anoLetivo" placeholder="Ex: 2025" required>
+                <button type="submit">Cadastrar Turma</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h3>Nova Disciplina</h3>
+            <form action="/coordenadoria/salvarDisciplina" method="post">
+                <input type="text" name="nome" placeholder="Ex: Matemática" required>
+                <button type="submit">Cadastrar Disciplina</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h3>Novo Professor</h3>
+            <form action="/coordenadoria/salvarProfessor" method="post">
+                <input type="text" name="nome" placeholder="Nome Completo" required>
+                <input type="email" name="email" placeholder="Email" required>
+                <button type="submit">Cadastrar Professor</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h3>Novo Horário (Slot)</h3>
+            <form action="/coordenadoria/salvarHorario" method="post">
+                <label>Início:</label>
+                <input type="time" name="inicio" required>
+                <label>Fim:</label>
+                <input type="time" name="fim" required>
+                <select name="periodo">
+                    <option value="Matutino">Matutino</option>
+                    <option value="Vespertino">Vespertino</option>
+                    <option value="Noturno">Noturno</option>
+                </select>
+                <button type="submit">Definir Horário</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h3>Matricular Aluno</h3>
+            <form action="/coordenadoria/salvarAluno" method="post">
+                <input type="text" name="nome" placeholder="Nome do Aluno" required>
+                <label>Selecionar Turma:</label>
+                <select name="turma.id">
+                    <option th:each="t : ${turmas}" th:value="${t.id}" th:text="${t.nome}"></option>
+                </select>
+                <button type="submit">Matricular</button>
+            </form>
+        </div>
+
+        <div class="card" style="grid-column: 1 / -1; background: #e3f2fd;">
+            <h3>Montar Grade Curricular (Cronograma)</h3>
+            <form action="/coordenadoria/salvarCronograma" method="post" style="display: flex; gap: 10px; flex-wrap: wrap;">
+                
+                <div style="flex: 1;">
+                    <label>Turma:</label>
+                    <select name="turma.id">
+                        <option th:each="t : ${turmas}" th:value="${t.id}" th:text="${t.nome}"></option>
+                    </select>
+                </div>
+
+                <div style="flex: 1;">
+                    <label>Dia:</label>
+                    <select name="diaSemana">
+                        <option value="MONDAY">Segunda</option>
+                        <option value="TUESDAY">Terça</option>
+                        <option value="WEDNESDAY">Quarta</option>
+                        <option value="THURSDAY">Quinta</option>
+                        <option value="FRIDAY">Sexta</option>
+                    </select>
+                </div>
+
+                <div style="flex: 1;">
+                    <label>Horário:</label>
+                    <select name="horario.id">
+                        <option th:each="h : ${horarios}" th:value="${h.id}" 
+                                th:text="${h.inicio} + ' - ' + ${h.fim}"></option>
+                    </select>
+                </div>
+
+                <div style="flex: 1;">
+                    <label>Matéria:</label>
+                    <select name="disciplina.id">
+                        <option th:each="d : ${disciplinas}" th:value="${d.id}" th:text="${d.nome}"></option>
+                    </select>
+                </div>
+
+                <div style="flex: 1;">
+                    <label>Professor:</label>
+                    <select name="professor.id">
+                        <option th:each="p : ${professores}" th:value="${p.id}" th:text="${p.nome}"></option>
+                    </select>
+                </div>
+
+                <button type="submit" style="width: 100%; background: #007bff;">Adicionar Aula à Grade</button>
+            </form>
+        </div>
+
+    </div>
+
+</body>
+</html>

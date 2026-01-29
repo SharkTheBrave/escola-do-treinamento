@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Escola Login</title>
+    <link rel="stylesheet" th:href="@{/styles/indexStyle.css}">
+</head>
+<body>
+
+<div class="card">
+    <input type="radio" id="tab1" name="nav" checked>
+    <input type="radio" id="tab2" name="nav">
+    <input type="radio" id="tab3" name="nav">
+
+    <div class="tabs">
+        <label for="tab1" class="tab-label">Aluno</label>
+        <label for="tab2" class="tab-label">Prof</label>
+        <label for="tab3" class="tab-label">Coord</label>
+    </div>
+
+    <div class="content">
+        <div th:if="${param.erro}" class="erro">Usuário não encontrado! Verifique o ID.</div>
+
+        <div id="form-aluno" class="form-box">
+            <h2>Área do Aluno</h2>
+            <form action="/login" method="post">
+                <input type="hidden" name="tipo" value="aluno">
+                <input type="number" name="idLogin" class="inp" placeholder="Digite sua Matrícula (ID)" required>
+                <button type="submit" class="btn">Entrar</button>
+            </form>
+        </div>
+
+        <div id="form-prof" class="form-box">
+            <h2>Área do Professor</h2>
+            <form action="/login" method="post">
+                <input type="hidden" name="tipo" value="professor">
+                <input type="number" name="idLogin" class="inp" placeholder="ID do Professor" required>
+                <button type="submit" class="btn" style="background: #28a745;">Acessar</button>
+            </form>
+        </div>
+
+        <div id="form-coord" class="form-box">
+            <h2>Coordenação</h2>
+            <form action="/login" method="post">
+                <input type="hidden" name="tipo" value="coordenadoria">
+                
+                <input type="text" name="email" class="inp" placeholder="admin@escola.com" value="admin@escola.com">
+                
+                <input type="password" name="senha" class="inp" placeholder="Senha" value="123">
+                
+                <button type="submit" class="btn" style="background: #dc3545;">Gerenciar</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

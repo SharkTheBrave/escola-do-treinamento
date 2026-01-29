@@ -1,0 +1,23 @@
+body { font-family: sans-serif; background: #f4f4f4; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+.card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 350px; }
+
+/* ABAS */
+input[type="radio"] { display: none; }
+.tabs { display: flex; justify-content: space-between; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
+.tab-label { cursor: pointer; padding: 10px; font-weight: bold; color: #777; flex: 1; text-align: center; }
+.tab-label:hover { background: #f9f9f9; }
+
+#tab1:checked ~ .tabs label[for="tab1"],
+#tab2:checked ~ .tabs label[for="tab2"],
+#tab3:checked ~ .tabs label[for="tab3"] { color: #007bff; border-bottom: 2px solid #007bff; }
+
+.form-box { display: none; }
+#tab1:checked ~ .content #form-aluno { display: block; }
+#tab2:checked ~ .content #form-prof { display: block; }
+#tab3:checked ~ .content #form-coord { display: block; }
+
+.inp { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; box-sizing: border-box; }
+.btn { width: 100%; padding: 10px; background: #007bff; color: white; border: none; cursor: pointer; }
+.btn:hover { background: #0056b3; }
+h2 { text-align: center; margin-top: 0; }
+.erro { color: red; text-align: center; font-size: 0.9em; margin-bottom: 10px; }
